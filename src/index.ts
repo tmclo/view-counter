@@ -1,18 +1,21 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.toml`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
 
-export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
-	},
-} satisfies ExportedHandler<Env>;
+const PAGEVIEWS_KEY_PREFIX = 'pageviews:';
+
+async function handleRequest(request) {
+  const url = new URL(request.url);
+  const key = PAGEVIEWS_KEY_PREFIX + url.pathname;
+
+  const storedValue = await websiteviews.get(key, 'json');
+  const currentCount = storedValue ? storedValue.count : 0;
+  const newCount = currentCount + 1;
+
+  await websiteviews.put(key, JSON.stringify({ count: newCount }));
+
+  return new Response(JSON.stringify({ count: newCount }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  });
+}
