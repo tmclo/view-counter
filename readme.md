@@ -6,6 +6,5 @@ ___
 
 ### Contact me!
 
-BlueSky: [@pinguin.uk](https://bsky.app/profile/pinguin.uk)\
 LinkedIn: [tmclo](https://www.linkedin.com/in/tmclo)\
 Website: [tmclo.dev](https://tmclo.dev)
